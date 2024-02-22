@@ -1,0 +1,46 @@
+import requests
+from bs4 import BeautifulSoup
+import pandas as pd
+
+url = "https://en.wikipedia.org/wiki/Pakistan"
+
+response = requests.get(url)
+
+if response.status_code == 200:
+    
+    soup = BeautifulSoup(response.text, 'html.parser')
+    
+    title = soup.title.text
+    
+    paragraphs = soup.find_all('p')
+    paragraph_texts = [paragraph.text.strip() for paragraph in paragraphs if paragraph.text.strip()]
+    
+    tables = soup.find_all('table', class_='wikitable')
+    table_texts = [table.get_text(separator='\n', strip=True) for table in tables]
+    
+    lists = soup.find_all('ul')
+    list_texts = [lst.get_text(separator='\n', strip=True) for lst in lists]
+    
+    all_text = '\n'.join(paragraph_texts + table_texts + list_texts)
+    
+    data = {'Title': [title], 'Content': [all_text]}
+    df = pd.DataFrame(data)
+    
+    df.to_csv('musab.csv', index=False)
+    
+    print("Data saved to musab.csv")
+else:
+    print("Failed to retrieve the webpage.")
+ lists = soup.find_all('ul')
+    list_texts = [lst.get_text(separator='\n', strip=True) for lst in lists]
+    
+    all_text = '\n'.join(paragraph_texts + table_texts + list_texts)
+    
+    data = {'Title': [title], 'Content': [all_text]}
+    df = pd.DataFrame(data)
+    
+    df.to_csv('musab.csv', index=False)
+    
+    print("Data saved to musab.csv")
+else:
+    print("Failed to retrieve the webpage.")
